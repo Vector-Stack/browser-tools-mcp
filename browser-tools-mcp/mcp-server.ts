@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer, ToolCallback } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import path from "path";
 import fs from "fs";
+import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 
 // Create the MCP server
 const server = new McpServer({
@@ -251,7 +252,7 @@ server.tool("getNetworkLogs", "Check ALL our network logs", async () => {
 server.tool(
   "takeScreenshot",
   "Take a screenshot of the current browser tab",
-  async () => {
+  async (): Promise<CallToolResult> => {
     return await withServerConnection(async () => {
       try {
         const response = await fetch(
@@ -262,13 +263,17 @@ server.tool(
         );
 
         const result = await response.json();
-
+        console.log(result)
         if (response.ok) {
+          // base 64 encoded representation of screenshot
+          const screenshotBase64 = fs.readFileSync(result.path, 'base64');
+
           return {
             content: [
               {
-                type: "text",
-                text: "Successfully saved screenshot",
+                type: "image",
+                data: screenshotBase64,
+                mimeType: "image/png",
               },
             ],
           };
