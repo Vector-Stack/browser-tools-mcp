@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
-import { McpServer, ToolCallback } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import path from "path";
 import fs from "fs";
-import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 
 // Create the MCP server
 const server = new McpServer({
