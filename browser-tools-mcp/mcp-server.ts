@@ -272,7 +272,7 @@ server.tool(
               {
                 type: "image",
                 // base 64 encoded representation of screenshot
-                data: fs.readFileSync(result.path, 'base64'),
+                data: await fs.promises.readFile(result.path, 'base64'),
                 mimeType: "image/png",
               },
             ]
