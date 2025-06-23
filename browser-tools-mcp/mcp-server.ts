@@ -252,7 +252,7 @@ server.tool("getNetworkLogs", "Check ALL our network logs", async () => {
 server.tool(
   "takeScreenshot",
   "Take a screenshot of the current browser tab",
-  async (): Promise<CallToolResult> => {
+  async () => {
     return await withServerConnection(async () => {
       try {
         const response = await fetch(
@@ -263,19 +263,20 @@ server.tool(
         );
 
         const result = await response.json();
-        console.log(result)
         if (response.ok) {
-          // base 64 encoded representation of screenshot
-          const screenshotBase64 = fs.readFileSync(result.path, 'base64');
-
           return {
             content: [
               {
+                type: "text",
+                text: "Successfully saved screenshot",
+              },
+              {
                 type: "image",
-                data: screenshotBase64,
+                // base 64 encoded representation of screenshot
+                data: fs.readFileSync(result.path, 'base64'),
                 mimeType: "image/png",
               },
-            ],
+            ]
           };
         } else {
           return {
